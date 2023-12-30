@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import kz.amir.newsapp.data.remote.api.NewsApiClient
 import kz.amir.newsapp.domain.model.Article
 import kz.amir.newsapp.domain.repository.NewsRepository
 import org.koin.core.component.KoinComponent
@@ -24,12 +23,11 @@ class HomeViewModel : ViewModel(), KoinComponent {
     private val _state = MutableStateFlow<State>(State.ShowLoading)
     val state: StateFlow<State> = _state.asStateFlow()
 
-    private val service = NewsApiClient.newsService()
-
     init {
         getNews()
     }
 
+    //todo add categories as optional params, at init there will be no params
     private fun getNews() {
         viewModelScope.launch {
             newsRepository.getNews()

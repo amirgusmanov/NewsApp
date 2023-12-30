@@ -2,7 +2,6 @@ package kz.amir.newsapp.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.Resources.Theme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,13 +19,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kz.amir.newsapp.R
+import kz.amir.newsapp.ui.theme.BackgroundWhite
 import kz.amir.newsapp.ui.theme.NewsAppTheme
+import kz.amir.newsapp.ui.theme.Typography
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : ComponentActivity() {
@@ -51,7 +51,7 @@ class SplashActivity : ComponentActivity() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(4294441980)),
+                .background(BackgroundWhite),
             contentAlignment = Alignment.Center
         ) {
             Image(
@@ -61,6 +61,7 @@ class SplashActivity : ComponentActivity() {
             )
             Text(
                 text = "Check the latest news",
+                fontStyle = Typography.bodySmall.fontStyle,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(50.dp)
