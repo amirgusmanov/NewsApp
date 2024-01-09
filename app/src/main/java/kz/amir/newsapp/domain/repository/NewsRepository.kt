@@ -5,5 +5,5 @@ import kz.amir.newsapp.domain.model.News
 
 interface NewsRepository {
 
-    suspend fun getNews(): Flow<News>
+    suspend fun getNews(category: String?): Flow<News>
 }

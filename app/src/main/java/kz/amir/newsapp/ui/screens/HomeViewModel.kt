@@ -27,10 +27,9 @@ class HomeViewModel : ViewModel(), KoinComponent {
         getNews()
     }
 
-    //todo add categories as optional params, at init there will be no params
-    private fun getNews() {
+    fun getNews(category: String? = null) {
         viewModelScope.launch {
-            newsRepository.getNews()
+            newsRepository.getNews(category)
                 .onStart { _state.value = State.ShowLoading }
                 .flowOn(Dispatchers.IO)
                 .catch { _state.value = State.Error(it) }

@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.BasicText
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.DateRange
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -23,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -78,7 +77,7 @@ fun NewsItem(article: Article) {
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            // Category
+            // Author
             Card(
                 modifier = Modifier
                     .wrapContentWidth()
@@ -105,7 +104,7 @@ fun NewsItem(article: Article) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = Icons.TwoTone.DateRange,
+                    painter = painterResource(id = R.drawable.ic_date),
                     contentDescription = null,
                     modifier = Modifier
                         .width(20.dp)
@@ -116,7 +115,8 @@ fun NewsItem(article: Article) {
 
                 BasicText(
                     text = article.publishedAt.formatDateString(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium
+                        .copy(color = Color.DarkGray),
                 )
             }
         }
@@ -129,7 +129,7 @@ fun NewsItemPreview() {
     val dummyArticle = Article(
         source = Source("1", "Cinema"),
         author = "John Doe",
-        title = "Sample News Title, Sample News Title, Sample News Title, Sample News Title, Sample News Title, Sample News Title, Sample News Title, Sample News Title, Sample News Title,",
+        title = "Sample News Title",
         description = "This is a sample news description. It can contain some details about the news. fa;sdlfkajdsflajdf;ladjfal;dsgjafljasfldvjas;ldjvzcxlknvzcxvnaknfdsjfalkds;jfalkds;fjadsl;fjadsf",
         url = "https://www.google.com",
         urlToImage = "https://www.example.com/image.jpg",

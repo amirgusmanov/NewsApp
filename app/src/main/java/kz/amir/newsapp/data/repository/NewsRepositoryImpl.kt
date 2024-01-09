@@ -8,8 +8,8 @@ import kz.amir.newsapp.domain.repository.NewsRepository
 
 class NewsRepositoryImpl(private val newsApi: NewsApi) : NewsRepository {
 
-    override suspend fun getNews(): Flow<News> = flow {
-        val response = newsApi.getNews()
+    override suspend fun getNews(category: String?): Flow<News> = flow {
+        val response = newsApi.getNews(category ?: "")
         if (response.isSuccessful) {
             response.body()?.mapTo()?.let {
                 emit(it)
