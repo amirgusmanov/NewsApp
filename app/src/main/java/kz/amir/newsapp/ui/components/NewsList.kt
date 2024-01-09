@@ -12,11 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kz.amir.newsapp.base.constants.Constants
-import kz.amir.newsapp.domain.model.Article
+import kz.amir.newsapp.ui.model.NewsUI
 import kz.amir.newsapp.ui.theme.BackgroundWhite
 
 @Composable
-fun NewsList(news: List<Article>) {
+fun NewsList(
+    news: List<NewsUI>,
+    onArticleClicked: (NewsUI) -> Unit
+) {
     AnimatedVisibility(visible = true) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -28,7 +31,9 @@ fun NewsList(news: List<Article>) {
                 .background(BackgroundWhite),
             content = {
                 items(news.filterNot { it.title == Constants.REMOVED_NEWS }) { article ->
-                    NewsItem(article = article)
+                    NewsItem(article = article) {
+                        onArticleClicked.invoke(article)
+                    }
                 }
             }
         )

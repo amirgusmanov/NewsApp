@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -28,16 +29,20 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import kz.amir.newsapp.R
 import kz.amir.newsapp.base.util.formatDateString
-import kz.amir.newsapp.domain.model.Article
-import kz.amir.newsapp.domain.model.Source
+import kz.amir.newsapp.ui.model.NewsUI
 import kz.amir.newsapp.ui.theme.NewsAppTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsItem(article: Article) {
+fun NewsItem(
+    article: NewsUI,
+    onItemClicked: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp),
+        onClick = { onItemClicked.invoke() },
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Column(
@@ -47,16 +52,8 @@ fun NewsItem(article: Article) {
                 .padding(8.dp)
         ) {
             // Image
-            val errorDrawable = LocalContext.current.getDrawable(R.drawable.ic_no_photo)
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(article.urlToImage)
-                    .fallback(errorDrawable)
-                    .error(errorDrawable)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = "Article main image",
-                contentScale = ContentScale.Crop,
+            NewsImage(
+                article = article,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)
@@ -78,56 +75,85 @@ fun NewsItem(article: Article) {
             Spacer(modifier = Modifier.height(4.dp))
 
             // Author
-            Card(
-                modifier = Modifier
-                    .wrapContentWidth()
-                    .padding(4.dp)
-                    .background(Color.Black, shape = MaterialTheme.shapes.small),
-                colors = CardDefaults.cardColors(containerColor = Color.Black)
-            ) {
-                BasicText(
-                    text = article.source?.name ?: "",
-                    style = MaterialTheme.typography.bodyMedium
-                        .copy(color = Color.White),
-                    modifier = Modifier
-                        .padding(vertical = 4.dp, horizontal = 8.dp)
-                )
-            }
+            AuthorComponent(article = article)
 
             Spacer(modifier = Modifier.height(4.dp))
 
             // Time
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_date),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(20.dp)
-                        .height(20.dp)
-                )
-
-                Spacer(modifier = Modifier.width(10.dp))
-
-                BasicText(
-                    text = article.publishedAt.formatDateString(),
-                    style = MaterialTheme.typography.bodyMedium
-                        .copy(color = Color.DarkGray),
-                )
-            }
+            TimeComponent(article = article)
         }
+    }
+}
+
+@Composable
+fun NewsImage(
+    article: NewsUI,
+    modifier: Modifier
+) {
+    val errorDrawable = LocalContext.current.getDrawable(R.drawable.ic_no_photo)
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(article.urlToImage)
+            .fallback(errorDrawable)
+            .error(errorDrawable)
+            .crossfade(true)
+            .build(),
+        contentDescription = "Article main image",
+        contentScale = ContentScale.Crop,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun AuthorComponent(article: NewsUI) {
+    Card(
+        modifier = Modifier
+            .wrapContentWidth()
+            .padding(4.dp)
+            .background(Color.Black, shape = MaterialTheme.shapes.extraSmall),
+        colors = CardDefaults.cardColors(containerColor = Color.Black)
+    ) {
+        BasicText(
+            text = article.sourceName ?: "",
+            style = MaterialTheme.typography.bodyMedium
+                .copy(color = Color.White),
+            modifier = Modifier
+                .padding(vertical = 4.dp, horizontal = 8.dp)
+        )
+    }
+}
+
+@Composable
+fun TimeComponent(article: NewsUI) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_date),
+            contentDescription = null,
+            modifier = Modifier
+                .width(20.dp)
+                .height(20.dp)
+        )
+
+        Spacer(modifier = Modifier.width(10.dp))
+
+        BasicText(
+            text = article.publishedAt.formatDateString(),
+            style = MaterialTheme.typography.bodyMedium
+                .copy(color = Color.DarkGray),
+        )
     }
 }
 
 @Composable
 @Preview(showBackground = true)
 fun NewsItemPreview() {
-    val dummyArticle = Article(
-        source = Source("1", "Cinema"),
+    val dummyArticle = NewsUI(
+        sourceName = "bbc",
         author = "John Doe",
         title = "Sample News Title",
         description = "This is a sample news description. It can contain some details about the news. fa;sdlfkajdsflajdf;ladjfal;dsgjafljasfldvjas;ldjvzcxlknvzcxvnaknfdsjfalkds;jfalkds;fjadsl;fjadsf",
@@ -137,6 +163,6 @@ fun NewsItemPreview() {
         content = "This is the content of the news article."
     )
     NewsAppTheme {
-        NewsItem(article = dummyArticle)
+        NewsItem(article = dummyArticle) {}
     }
 }

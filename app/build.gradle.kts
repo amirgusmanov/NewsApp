@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -103,4 +104,8 @@ dependencies {
     //coil
     val coilVersion = "2.5.0"
     implementation("io.coil-kt:coil-compose:$coilVersion")
+
+    //navigation
+    val navVersion = "2.7.6"
+    implementation("androidx.navigation:navigation-compose:$navVersion")
 }

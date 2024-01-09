@@ -9,11 +9,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import kz.amir.newsapp.base.constants.Categories
 import kz.amir.newsapp.ui.components.CategoriesList
 import kz.amir.newsapp.ui.components.Error
 import kz.amir.newsapp.ui.components.Loading
 import kz.amir.newsapp.ui.components.NewsList
+import kz.amir.newsapp.ui.navigation.Screen
 
 /**
  * todo: think about getting locale country code and saving it locally
@@ -23,7 +25,8 @@ import kz.amir.newsapp.ui.components.NewsList
  */
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
+fun HomeScreen(navController: NavController) {
+    val viewModel: HomeViewModel = viewModel()
     val uiState by viewModel.state.collectAsState()
 
     Column {
@@ -39,7 +42,16 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                NewsList(news = (uiState as HomeViewModel.State.Success).data ?: emptyList())
+                NewsList(
+                    news = (uiState as HomeViewModel.State.Success).data ?: emptyList(),
+                    onArticleClicked = { article ->
+                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                            key = "article",
+                            value = article
+                        )
+                        navController.navigate(route = Screen.Detail.route)
+                    }
+                )
             }
         }
     }
