@@ -99,4 +99,8 @@ dependencies {
     //viewModel
     val viewModelVersion = "2.6.2"
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$viewModelVersion")
+
+    //coil
+    val coilVersion = "2.5.0"
+    implementation("io.coil-kt:coil-compose:$coilVersion")
 }
