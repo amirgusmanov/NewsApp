@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kz.amir.newsapp.base.constants.Categories
+import kz.amir.newsapp.base.constants.Constants
 import kz.amir.newsapp.ui.components.CategoriesList
 import kz.amir.newsapp.ui.components.Error
 import kz.amir.newsapp.ui.components.Loading
@@ -20,19 +21,29 @@ import kz.amir.newsapp.ui.navigation.Screen
 /**
  * todo: think about getting locale country code and saving it locally
  * todo: custom or lib pagination for viewing news (Homescreen)
- * todo: news preview screen
  * val locale = LocalContext.current.resources.configuration.locales[0].country.lowercase()
  */
 
 @Composable
 fun HomeScreen(navController: NavController) {
     val viewModel: HomeViewModel = viewModel()
+
     val uiState by viewModel.state.collectAsState()
+//    todo: think about validation before opening details screen
+//    var isSaved by rememberSaveable { mutableStateOf(false) }
 
     Column {
         CategoriesList(
             categories = Categories.items,
-            onCategorySelected = { viewModel.getNews(it) }
+            onCategorySelected = {
+                if (it == Constants.SAVED_CATEGORY) {
+//                    isSaved = true
+                    viewModel.getSavedNews()
+                } else {
+//                    isSaved = false
+                    viewModel.getNews(it)
+                }
+            }
         )
 
         when (uiState) {
@@ -45,10 +56,10 @@ fun HomeScreen(navController: NavController) {
                 NewsList(
                     news = (uiState as HomeViewModel.State.Success).data ?: emptyList(),
                     onArticleClicked = { article ->
-                        navController.currentBackStackEntry?.savedStateHandle?.set(
-                            key = "article",
-                            value = article
-                        )
+                        navController.currentBackStackEntry?.savedStateHandle?.apply {
+                            set(key = "article", value = article)
+//                            set(key = "isSaved", value = viewModel.isArticleSaved)
+                        }
                         navController.navigate(route = Screen.Detail.route)
                     }
                 )

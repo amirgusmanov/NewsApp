@@ -30,7 +30,15 @@ fun NewsList(
                 .padding(horizontal = 2.dp)
                 .background(BackgroundWhite),
             content = {
-                items(news.filterNot { it.title == Constants.REMOVED_NEWS }) { article ->
+                items(
+                    news
+                        .filterNot {
+                            it.title == Constants.REMOVED_NEWS
+                                    || it.urlToImage.isNullOrEmpty()
+                                    || it.content.isNullOrEmpty()
+                        }
+                        .map { it.copy(content = it.content?.substringBefore("[")?.trim()) }
+                ) { article ->
                     NewsItem(article = article) {
                         onArticleClicked.invoke(article)
                     }

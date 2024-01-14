@@ -1,6 +1,5 @@
 package kz.amir.newsapp.ui.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,13 +16,24 @@ fun AppNavigation() {
             HomeScreen(navController = navController)
         }
         composable(route = Screen.Detail.route) {
-            //todo: fix crash when pop back stack on details screen
-            val article = navController
+            /**
+             * corner case: when navigate to home if you unsaved article it needs to be removed
+             * from home screen list
+             */
+            navController
                 .previousBackStackEntry
                 ?.savedStateHandle
-                ?.get<NewsUI>("article")
-            Log.d("article", "AppNavigation: $article")
-            DetailsScreen(navController = navController, article = article!!)
+                ?.apply {
+                    val article = get<NewsUI>("article")
+                    val isSaved = get<Boolean>("isSaved")
+                    if (article != null && isSaved != null) {
+                        DetailsScreen(
+                            navController = navController,
+                            article = article,
+                            isSaved = isSaved
+                        )
+                    }
+                }
         }
     }
 }

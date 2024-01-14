@@ -5,4 +5,5 @@ object Constants {
     const val AUTH = "X-Api-Key"
     const val TIMEOUT = 60L
     const val REMOVED_NEWS = "[Removed]"
+    const val SAVED_CATEGORY = "saved"
 }

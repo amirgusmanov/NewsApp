@@ -27,6 +27,18 @@ class HomeViewModel : ViewModel(), KoinComponent {
         getNews()
     }
 
+    fun getSavedNews() {
+        viewModelScope.launch {
+            newsRepository.getSavedNews()
+                .flowOn(Dispatchers.IO)
+                .onStart { _state.value = State.ShowLoading }
+                .catch { _state.value = State.Error(it) }
+                .collectLatest {
+                    _state.value = State.Success(it.map { article -> article.mapTo() })
+                }
+        }
+    }
+
     fun getNews(category: String? = null) {
         viewModelScope.launch {
             newsRepository.getNews(category)
