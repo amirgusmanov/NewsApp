@@ -2,6 +2,7 @@ package kz.amir.newsapp.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kz.amir.newsapp.base.util.toLocalDateTime
 import kz.amir.newsapp.data.local.database.AppDatabase
 import kz.amir.newsapp.data.local.entity.mapper.NewsEntityMapper
 import kz.amir.newsapp.data.remote.service.NewsApi
@@ -30,7 +31,9 @@ class NewsRepositoryImpl(
     }
 
     override suspend fun getSavedNews(): Flow<List<Article>> = flow {
-        val news = db.newsDao().getAll().map { entity -> entity.mapTo() }
+        val news = db.newsDao().getAll()
+            .map { entity -> entity.mapTo() }
+            .sortedByDescending { it.publishedAt?.toLocalDateTime() }
         emit(news)
     }
 
