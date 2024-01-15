@@ -55,6 +55,7 @@ fun DetailsScreen(
     var isSavedArticle by rememberSaveable { mutableStateOf(isSaved) }
 
     BackHandler {
+        passDataBack(navController, needsToUpdate = isSavedArticle != isSaved)
         navController.popBackStack(route = Screen.Home.route, inclusive = false)
     }
 
@@ -143,6 +144,7 @@ fun DetailsScreen(
                     .padding(start = 2.5.dp, end = 10.dp),
                 text = "Back",
                 onClicked = {
+                    passDataBack(navController, needsToUpdate = isSavedArticle != isSaved)
                     navController.popBackStack(route = Screen.Home.route, inclusive = false)
                 }
             )
@@ -170,6 +172,13 @@ fun OutlinedButton(
             style = TextStyle(fontWeight = FontWeight.Bold)
         )
     }
+}
+
+private fun passDataBack(navController: NavController, needsToUpdate: Boolean) {
+    navController
+        .previousBackStackEntry
+        ?.savedStateHandle
+        ?.set("needsToUpdate", needsToUpdate)
 }
 
 @Preview(showSystemUi = true)

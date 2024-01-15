@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,21 +30,35 @@ import kz.amir.newsapp.ui.navigation.Screen
  */
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(
+    navController: NavController,
+    needsToUpdate: Boolean?
+) {
     val viewModel: HomeViewModel = viewModel()
 
     val uiState by viewModel.state.collectAsState()
-    var isSaved by rememberSaveable { mutableStateOf(false) }
+    var isSavedCategory by rememberSaveable { mutableStateOf(false) }
+    var category by rememberSaveable { mutableStateOf("") }
+
+    needsToUpdate?.let {
+        LaunchedEffect(needsToUpdate) {
+            if (isSavedCategory && needsToUpdate)
+                viewModel.getSavedNews()
+            else if (!isSavedCategory && needsToUpdate)
+                viewModel.getNews(category)
+        }
+    }
 
     Column {
         CategoriesList(
             categories = Categories.items,
             onCategorySelected = {
                 if (it == Constants.SAVED_CATEGORY) {
-                    isSaved = true
+                    isSavedCategory = true
                     viewModel.getSavedNews()
                 } else {
-                    isSaved = false
+                    isSavedCategory = false
+                    category = it
                     viewModel.getNews(it)
                 }
             }
@@ -61,7 +76,7 @@ fun HomeScreen(navController: NavController) {
                     onArticleClicked = { article ->
                         navController.currentBackStackEntry?.savedStateHandle?.apply {
                             set(key = "article", value = article)
-                            if (isSaved)
+                            if (isSavedCategory)
                                 set(key = "isSaved", value = true)
                             else
                                 set(key = "isSaved", value = article.isSaved)
