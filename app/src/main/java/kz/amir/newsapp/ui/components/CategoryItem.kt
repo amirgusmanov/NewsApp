@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import kz.amir.newsapp.ui.theme.Pink100
+import kz.amir.newsapp.ui.theme.Purple60
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,7 +24,7 @@ fun CategoryItem(
     Card(
         modifier = Modifier.wrapContentSize(),
         colors = CardDefaults.cardColors(
-            containerColor = Pink100,
+            containerColor = Purple60,
             contentColor = Color.White
         ),
         border = BorderStroke(

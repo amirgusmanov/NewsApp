@@ -4,6 +4,7 @@ object Categories {
     val regex = "^.*?\\s".toRegex()
 
     val items = listOf(
+        "✨ Saved",
         "💼 Business",
         "🎭 Entertainment",
         "🏛️ Politics",

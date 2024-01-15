@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("kotlin-parcelize")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -103,4 +105,15 @@ dependencies {
     //coil
     val coilVersion = "2.5.0"
     implementation("io.coil-kt:coil-compose:$coilVersion")
+
+    //navigation
+    val navVersion = "2.7.6"
+    implementation("androidx.navigation:navigation-compose:$navVersion")
+
+    //room
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
 }
