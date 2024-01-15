@@ -44,5 +44,5 @@ class NewsRepositoryImpl(
     }
 
     override suspend fun containsArticleWithTitle(title: String): Boolean =
-        db.newsDao().containsElementWithTitle(title)
+        db.newsDao().getNewsWithTitle(title).isNotEmpty()
 }

@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -21,6 +24,7 @@ import kz.amir.newsapp.ui.navigation.Screen
 /**
  * todo: think about getting locale country code and saving it locally
  * todo: custom or lib pagination for viewing news (Homescreen)
+ * todo: think about widgets
  * val locale = LocalContext.current.resources.configuration.locales[0].country.lowercase()
  */
 
@@ -29,18 +33,17 @@ fun HomeScreen(navController: NavController) {
     val viewModel: HomeViewModel = viewModel()
 
     val uiState by viewModel.state.collectAsState()
-//    todo: think about validation before opening details screen
-//    var isSaved by rememberSaveable { mutableStateOf(false) }
+    var isSaved by rememberSaveable { mutableStateOf(false) }
 
     Column {
         CategoriesList(
             categories = Categories.items,
             onCategorySelected = {
                 if (it == Constants.SAVED_CATEGORY) {
-//                    isSaved = true
+                    isSaved = true
                     viewModel.getSavedNews()
                 } else {
-//                    isSaved = false
+                    isSaved = false
                     viewModel.getNews(it)
                 }
             }
@@ -58,7 +61,10 @@ fun HomeScreen(navController: NavController) {
                     onArticleClicked = { article ->
                         navController.currentBackStackEntry?.savedStateHandle?.apply {
                             set(key = "article", value = article)
-//                            set(key = "isSaved", value = viewModel.isArticleSaved)
+                            if (isSaved)
+                                set(key = "isSaved", value = true)
+                            else
+                                set(key = "isSaved", value = article.isSaved)
                         }
                         navController.navigate(route = Screen.Detail.route)
                     }

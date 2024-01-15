@@ -1,12 +1,10 @@
 package kz.amir.newsapp.data.local.dao
 
-import android.util.Log
 import androidx.annotation.Keep
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import kz.amir.newsapp.data.local.entity.NewsEntity
 
 @Keep
@@ -29,11 +27,4 @@ interface NewsDao {
 
     @Query("SELECT * FROM NewsEntity WHERE title = :title")
     suspend fun getNewsWithTitle(title: String): List<NewsEntity>
-
-    @Transaction
-    suspend fun containsElementWithTitle(title: String): Boolean {
-        val elements = getNewsWithTitle(title)
-        Log.d("SAVEDTAG", "containsElementWithTitle: Checking")
-        return elements.isNotEmpty()
-    }
 }

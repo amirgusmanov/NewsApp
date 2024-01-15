@@ -48,14 +48,11 @@ fun DetailsScreen(
     article: NewsUI,
     isSaved: Boolean
 ) {
+    //todo: handle viewModel states correctly
     val viewModel: DetailsViewModel = viewModel()
-
-    viewModel.checkIsArticleSaved(article.title)
-
     val uiState = viewModel.state.collectAsState()
-    val isArticleSaved = viewModel.isArticleSaved.collectAsState()
 
-    var isSavedArticle by rememberSaveable { mutableStateOf(isArticleSaved.value) }
+    var isSavedArticle by rememberSaveable { mutableStateOf(isSaved) }
 
     BackHandler {
         navController.popBackStack(route = Screen.Home.route, inclusive = false)

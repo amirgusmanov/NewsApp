@@ -15,7 +15,8 @@ data class NewsUI(
     val url: String?,
     val urlToImage: String?,
     val publishedAt: String?,
-    val content: String?
+    val content: String?,
+    val isSaved: Boolean = false
 ) : Parcelable, MapTo<Article> {
     override fun mapTo(): Article = Article(
         source = Source(id = null, name = sourceName),

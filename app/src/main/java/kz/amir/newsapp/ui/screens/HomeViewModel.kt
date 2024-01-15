@@ -45,8 +45,15 @@ class HomeViewModel : ViewModel(), KoinComponent {
                 .onStart { _state.value = State.ShowLoading }
                 .flowOn(Dispatchers.IO)
                 .catch { _state.value = State.Error(it) }
-                .collectLatest {
-                    _state.value = State.Success(it.articles?.map { article -> article.mapTo() })
+                .collectLatest { news ->
+                    val articles = news.articles?.map { article ->
+                        article.mapTo().copy(
+                            isSaved = newsRepository.containsArticleWithTitle(
+                                article.title.toString()
+                            )
+                        )
+                    }
+                    _state.value = State.Success(articles)
                 }
         }
     }

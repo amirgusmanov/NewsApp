@@ -19,16 +19,6 @@ class DetailsViewModel : ViewModel(), KoinComponent {
     private val _state = MutableStateFlow<State>(State.ShowLoading)
     val state: StateFlow<State> = _state.asStateFlow()
 
-    private val _isArticleSaved = MutableStateFlow(false)
-    val isArticleSaved: StateFlow<Boolean> = _isArticleSaved.asStateFlow()
-
-    fun checkIsArticleSaved(title: String?) {
-        if (title.isNullOrEmpty()) return
-        viewModelScope.launch(Dispatchers.IO) {
-            _isArticleSaved.value = newsRepository.containsArticleWithTitle(title)
-        }
-    }
-
     fun deleteArticle(title: String) {
         viewModelScope.launch(Dispatchers.IO) {
             newsRepository.deleteArticleByTitle(title)
