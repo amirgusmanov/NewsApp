@@ -26,7 +26,6 @@ import kz.amir.newsapp.ui.navigation.Screen
  * todo: think about getting locale country code and saving it locally
  * todo: custom or lib pagination for viewing news (Homescreen)
  * todo: think about widgets
- * todo: sort by date elements in saved
  * val locale = LocalContext.current.resources.configuration.locales[0].country.lowercase()
  */
 

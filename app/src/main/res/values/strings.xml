@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">NewsApp</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="logo_preview">logo_preview</string>
+    <string name="fetch_alert_message">Something went wrong</string>
+    <string name="empty_description">Empty description</string>
 </resources>

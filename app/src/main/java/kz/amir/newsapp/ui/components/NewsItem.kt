@@ -53,7 +53,7 @@ fun NewsItem(
         ) {
             // Image
             NewsImage(
-                article = article,
+                url = article.urlToImage,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)
@@ -87,13 +87,13 @@ fun NewsItem(
 
 @Composable
 fun NewsImage(
-    article: NewsUI,
-    modifier: Modifier
+    url: String?,
+    modifier: Modifier,
 ) {
     val errorDrawable = LocalContext.current.getDrawable(R.drawable.ic_no_photo)
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(article.urlToImage)
+            .data(url)
             .fallback(errorDrawable)
             .error(errorDrawable)
             .crossfade(true)

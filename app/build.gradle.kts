@@ -119,4 +119,12 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
+
+    //glance api for widget with compose
+    val glanceVersion = "1.0.0"
+    implementation("androidx.glance:glance-appwidget:$glanceVersion")
+
+    // work manager
+    val workManagerVersion = "2.9.0"
+    implementation("androidx.work:work-runtime-ktx:$workManagerVersion")
 }
