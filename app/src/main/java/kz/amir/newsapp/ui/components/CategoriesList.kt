@@ -19,7 +19,7 @@ fun CategoriesList(
 ) {
     AnimatedVisibility(visible = true) {
         LazyRow(
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(4.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             items(categories) {
