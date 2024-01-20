@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -154,6 +155,7 @@ fun SearchHistoryItem(
                         articleImageUrl = it.imageUrl ?: "",
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
+                            .clip(MaterialTheme.shapes.medium)
                             .width(40.dp)
                             .height(40.dp)
                     )
@@ -177,8 +179,6 @@ fun SearchHistoryImage(
 ) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
-            .error(LocalContext.current.getDrawable(R.drawable.ic_logo))
-            .fallback(LocalContext.current.getDrawable(R.drawable.ic_logo))
             .data(articleImageUrl)
             .crossfade(true)
             .build(),
