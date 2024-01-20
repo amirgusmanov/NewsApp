@@ -20,6 +20,6 @@ To get started with app, follow these steps:
 ### Previews 📷
 
 <p align="center">
-   <img src="preview/preview0.mp4" alt="drawing" width="270px" />
-   <img src="preview/preview1.mp4" alt="drawing" width="270px" />
+   <img src="preview/preview0-output1.gif" alt="drawing" width="270px" />
+   <img src="preview/preview1-output1.gif" alt="drawing" width="270px" />
 </p>
