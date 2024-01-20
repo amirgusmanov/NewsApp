@@ -29,3 +29,8 @@ data class NewsUI(
         content = this.content,
     )
 }
+
+data class SearchHistoryUI(
+    val articleTitle: String?,
+    val articleImageUrl: String?
+)

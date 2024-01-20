@@ -1,6 +1,5 @@
 package kz.amir.newsapp.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicText
@@ -13,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import kz.amir.newsapp.ui.theme.Purple60
+import kz.amir.newsapp.ui.theme.PurpleLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,12 +23,8 @@ fun CategoryItem(
     Card(
         modifier = Modifier.wrapContentSize(),
         colors = CardDefaults.cardColors(
-            containerColor = Purple60,
+            containerColor = PurpleLight,
             contentColor = Color.White
-        ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = Color.Gray
         ),
         onClick = {
             onCategorySelected()

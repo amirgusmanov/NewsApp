@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kz.amir.newsapp.data.local.entity.NewsEntity
+import kz.amir.newsapp.data.local.entity.SearchHistoryEntity
 
 @Keep
 @Dao
@@ -27,4 +28,10 @@ interface NewsDao {
 
     @Query("SELECT * FROM NewsEntity WHERE title = :title")
     suspend fun getNewsWithTitle(title: String): List<NewsEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSearchHistory(history: SearchHistoryEntity)
+
+    @Query("SELECT * FROM SearchHistoryEntity ORDER BY datetime(joined_date)")
+    suspend fun getSearchHistory(): List<SearchHistoryEntity>
 }

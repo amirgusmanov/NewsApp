@@ -8,6 +8,8 @@ import kz.amir.newsapp.data.local.entity.mapper.NewsEntityMapper
 import kz.amir.newsapp.data.remote.service.NewsApi
 import kz.amir.newsapp.domain.model.Article
 import kz.amir.newsapp.domain.model.News
+import kz.amir.newsapp.domain.model.SearchHistory
+import kz.amir.newsapp.domain.model.mapper.SearchHistoryMapper
 import kz.amir.newsapp.domain.repository.NewsRepository
 
 class NewsRepositoryImpl(
@@ -44,6 +46,26 @@ class NewsRepositoryImpl(
                 emit(it)
             }
         }
+    }
+
+    override suspend fun getNewsBySearch(keyword: String): Flow<News> = flow {
+        val response = newsApi.getNewsBySearchKeyword(keyword)
+        if (response.isSuccessful) {
+            response.body()?.mapTo()?.let { news ->
+                emit(news)
+                news.articles
+                    ?.filterNot { it.urlToImage.isNullOrEmpty() || it.title.isNullOrEmpty() }
+                    ?.map { SearchHistoryMapper.mapToEntity(article = it, title = keyword) }
+                    ?.get(0)
+                    ?.also { db.newsDao().insertSearchHistory(it) }
+            }
+        }
+    }
+
+    override suspend fun getSearchHistory(): Flow<List<SearchHistory>> = flow {
+        val searchHistory = db.newsDao().getSearchHistory()
+            .map { searchHistoryEntity -> searchHistoryEntity.mapTo() }
+        emit(searchHistory)
     }
 
     override suspend fun containsArticleWithTitle(title: String): Boolean =

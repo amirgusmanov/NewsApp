@@ -102,7 +102,7 @@ fun DetailsScreen(
 
         //Image
         NewsImage(
-            article = article,
+            articleImageUrl = article.urlToImage ?: "",
             modifier = Modifier
                 .fillMaxWidth()
                 .height(250.dp)
