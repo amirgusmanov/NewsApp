@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kz.amir.newsapp.domain.model.SearchHistory
 import kz.amir.newsapp.domain.repository.NewsRepository
 import kz.amir.newsapp.ui.model.NewsUI
 import org.koin.core.component.KoinComponent
@@ -22,6 +23,9 @@ class HomeViewModel : ViewModel(), KoinComponent {
 
     private val _state = MutableStateFlow<State>(State.ShowLoading)
     val state: StateFlow<State> = _state.asStateFlow()
+
+    private val _searchHistory = MutableStateFlow<SearchState>(SearchState.ShowLoading)
+    val searchHistory: StateFlow<SearchState> = _searchHistory.asStateFlow()
 
     init {
         getNews()
@@ -58,9 +62,43 @@ class HomeViewModel : ViewModel(), KoinComponent {
         }
     }
 
+    fun getSearchHistory() {
+        viewModelScope.launch {
+            newsRepository.getSearchHistory()
+                .flowOn(Dispatchers.IO)
+                .onStart { _searchHistory.value = SearchState.ShowLoading }
+                .catch { _searchHistory.value = SearchState.Result(emptyList()) }
+                .collectLatest { _searchHistory.value = SearchState.Result(it) }
+        }
+    }
+
+    fun getNewsBySearchKeyword(keyword: String) {
+        viewModelScope.launch {
+            newsRepository.getNewsBySearch(keyword)
+                .onStart { _state.value = State.ShowLoading }
+                .flowOn(Dispatchers.IO)
+                .catch { _state.value = State.Error(it) }
+                .collectLatest { news ->
+                    val articles = news.articles?.map { article ->
+                        article.mapTo().copy(
+                            isSaved = newsRepository.containsArticleWithTitle(
+                                article.title.toString()
+                            )
+                        )
+                    }
+                    _state.value = State.Success(articles)
+                }
+        }
+    }
+
     sealed interface State {
         data object ShowLoading : State
         data class Success(val data: List<NewsUI>?) : State
         data class Error(val error: Throwable) : State
+    }
+
+    sealed interface SearchState {
+        data object ShowLoading : SearchState
+        data class Result(val data: List<SearchHistory>?) : SearchState
     }
 }

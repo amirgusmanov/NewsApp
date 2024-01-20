@@ -9,7 +9,11 @@ interface NewsApi {
 
     @GET("top-headlines?country=us")
     suspend fun getNews(
-        @Query("category") category: String,
-//        @Query("q") searchKeyword: String
+        @Query("category") category: String
+    ): Response<NewsData>
+
+    @GET("top-headlines?country=us")
+    suspend fun getNewsBySearchKeyword(
+        @Query("q") keyword: String
     ): Response<NewsData>
 }

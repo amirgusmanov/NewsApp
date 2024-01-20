@@ -47,7 +47,10 @@ fun HomeScreen(
     }
 
     Column {
-        SearchInput(searchHistory = emptyList(), searchKeyword = {})
+        SearchInput(
+            viewModel = viewModel,
+            searchKeyword = viewModel::getNewsBySearchKeyword
+        )
 
         CategoriesList(
             categories = Categories.items,
